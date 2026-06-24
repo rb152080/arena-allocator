@@ -1,3 +1,13 @@
+// #ifdef __linux__ also works
+// #if defined() can be combined
+// ex: #if defined(__linux__) && defined(__x86_64__)
+#if defined(__linux__)
+
+#define _DEFAULT_SOURCE
+
+#include <sys/mman.h>
+#include <unistd.h>
+
 #include <stdalign.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -6,7 +16,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// TODO: capitalize these
 typedef int8_t i8;
 typedef int16_t i16;
 typedef int32_t i32;
@@ -21,7 +30,7 @@ typedef i8 b8;
 typedef i32 b32;
 
 // need to put parentheses around whole expression and every variable/ parameter
-// TODO: put better variable names
+// these are base 2: kibi, mebi, gibi; base 10: kilo, mega, giga
 #define KiB(n) ((u64)(n) << 10)
 #define MiB(n) ((u64)(n) << 20)
 #define GiB(n) ((u64)(n) << 30)
@@ -135,16 +144,6 @@ void arena_clear(memory_arena* arena)
     arena_pop_to(arena, ARENA_BASE_POSITION);
 }
 
-// #ifdef __linux__ also works
-// #if defined() can be combined
-// ex: #if defined(__linux__) && defined(__x86_64__)
-#if defined(__linux__)
-
-#define _DEFAULT_SOURCE
-
-#include <sys/mman.h>
-#include <unistd.h>
-
 u32 platform_get_pagesize(void)
 {
     return (u32)sysconf(_SC_PAGESIZE);
@@ -183,6 +182,11 @@ int main(void) // explicity tells the compiler that it takes no arguments
 {
     // printf("%zu\n", ARENA_ALIGNMENT);
     memory_arena* permanent_arena = arena_create(GiB(1), MiB(1));
+    while (1)
+    {
+        arena_push(permanent_arena, MiB(16), false);
+        getc(stdin);
+    }
     arena_destroy(permanent_arena);
     return 0;
 }
