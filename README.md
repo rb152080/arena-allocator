@@ -20,14 +20,15 @@ In addition, allocating from an arena happens in $O(1)$ time, since arenas use a
 
 ## When to use an Arena Allocator
 
-Arena allocators are perfect when you have a good idea of your maximum memory requirements, or when you need to allocate a large amount of temporary objects that share the same lifetime. They are particularly useful in games where there are graphical frames. Modern video games typically render 60, 120, or even 144+ frames per second. 
+Arena allocators are perfect when you have a good idea of your maximum memory requirements, or when you need to allocate a large amount of temporary objects that share the same lifetime. They are particularly useful in games where there are graphical frames. 
 
+Modern video games render 60 to 144+ frames per second. This means that the program needs to allocate memory up to hundreds of times per second to display frames for the user to see. This is a situation in which you do not want to call `malloc` and `free` for every frame since it is a costly operation that would reduce performance and cause lag in games. 
 
-Each frame would use the same amount of memory, and it would typically have to be refreshed every second, for each frame. Typically, this would mean that for each second, the program has to allocate memory for that frame. This is a situation in which you do not want to reallocate memory for that frame since it is a costly operation that would reduce performance in games. So, this is a perfect example for when you can use an arena for frames. You can have an arena specifically for managing the memory of frames. You allocate the objects needed for the frame onto that arena, and after each second is over, you reset the pointer back to the start of the arena. That way the memory allocation and deallocation only happens once: at the start of the game and at the end of the game.
+So, this is a perfect example for when to use an arena allocator. You allocate a dedicated arena specifically for frame data when the game boots up. When a frame needs to be displayed, all of the data needed for the frame to render is allocated in the arena. Once the frame is displayed, the arena pointer gets reset back to the start of the arena and the cycle repeats itself for every frame. That way the physical memory allocation and deallocation only happens once at the start and end of the game, keeping your frame rate smooth.
 
 ## Real World Example: Frame Arena
 
-For demonstration and readability purposes, we use `malloc` and `free` here, but people often bypass them and instead use the underlying system kernel functions like `mmap` and `ummap`. 
+For demonstration and readability purposes, we use `malloc` and `free` here, but people often bypass them and instead directly use the underlying system kernel functions like `mmap` and `ummap`. 
 
 ```c
 
