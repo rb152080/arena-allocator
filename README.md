@@ -26,13 +26,15 @@ Modern video games render 60 to 144+ frames per second. This means that the prog
 
 So, this is a perfect example for when to use an arena allocator. You allocate a dedicated arena specifically for frame data when the game boots up. When a frame needs to be displayed, all of the data needed for the frame to render is allocated in the arena. Once the frame is displayed, the arena pointer gets reset back to the start of the arena and the cycle repeats itself for every frame. That way the physical memory allocation and deallocation only happens once at the start and end of the game, keeping your frame rate smooth.
 
-## Real World Example: Frame Arena
-
-For demonstration and readability purposes, we use `malloc` and `free` here, but people often bypass them and instead directly use the underlying system kernel functions like `mmap` and `ummap`. 
+## Real-World Example: The Frame Arena
 
 ```c
 
+
+
 ```
+
+***Note:** For demonstration and readability purposes, we use `malloc` and `free` here, but people often bypass them and instead directly use the underlying system-level kernel functions like `mmap` and `munmap` (found in `<sys/mman.h>` if you are on linux).*
 
 ## Learn More about Arena Allocators
 
