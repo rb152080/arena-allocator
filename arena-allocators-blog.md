@@ -108,6 +108,10 @@ void arena_clear(memory_arena* arena)
 With our arena functions completed, we can now see them in action.
 
 ```c
+#define KiB(n) ((u64)(n) << 10)
+#define MiB(n) ((u64)(n) << 20)
+#define GiB(n) ((u64)(n) << 30)
+
 int main(void)
 {
 
