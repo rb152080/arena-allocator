@@ -56,8 +56,9 @@ void arena_clear(memory_arena* arena)
 int main(void)
 {
 
-    // 1. Initialize the arena
-    // We call it frame_arena because it is memory specifically reserved for the frames in the game
+    // 1. Initialize the arena at the start of the game
+    // We call it frame_arena because it is memory specifically reserved for the
+    // frames in the game
     memory_arena* frame_arena = arena_create(MiB(64));
 
     bool game_is_running = true;
@@ -66,16 +67,19 @@ int main(void)
     while (game_is_running)
     {
         // 2. Temporary Gameplay Graphics Allocations
-        int* particle_positions = (int*)arena_push(frame_arena, sizeof(int) * 1000);
+        int* particle_positions =
+            (int*)arena_push(frame_arena, sizeof(int) * 1000);
         char* frame_log_buffer = (char*)arena_push(frame_arena, 256);
 
         // 3. Simulating and rendering
-        // These are arbitrary function names I came up with (for demonstration purposes)
+        // These are arbitrary function names I came up with (for demonstration
+        // purposes)
         update_game_physics(particle_positions);
         draw_frame(frame_log_buffer);
 
         // 4. Wiping the canvas
-        // Once the frame is drawn to the screen, we snap the pointer back to the beginning for the next frame
+        // Once the frame is drawn to the screen, we snap the pointer back to
+        // the beginning for the next frame
         arena_clear(frame_arena);
     }
 
