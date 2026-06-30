@@ -49,6 +49,10 @@ void arena_clear(memory_arena* arena)
     arena->position = ARENA_BASE_POSITION;
 }
 
+void update_game_physics(int* param) {}
+
+void draw_frame(char* param) {}
+
 #define KiB(n) ((u64)(n) << 10)
 #define MiB(n) ((u64)(n) << 20)
 #define GiB(n) ((u64)(n) << 30)
