@@ -68,7 +68,7 @@ void arena_destroy(memory_arena* arena)
 }
 ```
 
-**\*Note:** For demonstration and readability purposes, we use `malloc` and `free` here. In production code, developers often bypass these and instead directly use underlying system-level kernel functions like `mmap` and `munmap` (found in `<sys/mman.h>` if you are on Linux).\*
+***Note:*** *For demonstration and readability purposes, we use `malloc` and `free` here. In production code, developers often bypass these and instead directly use underlying system-level kernel functions like `mmap` and `munmap` (found in `<sys/mman.h>` if you are on Linux).*
 
 ### Pushing Something onto the Arena
 
